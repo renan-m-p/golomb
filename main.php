@@ -1,44 +1,63 @@
 <?php
-require_once('vendor/autoload.php');
 require_once('libs/Encoder.php');
 require_once('libs/Decoder.php');
 
-$sText = "My text goes here";
-$sTextOutHexa = '';
 
-$M = 10; //@divisor
-
-$oEncoder = new Encoder($M);
-$oDecoder = new Decoder($M);
+$iBase   = $_POST['base'];
+$sOption = $_POST['option'];
 
 
-for ($i = 0; $i < strlen($sText); $i++) {
-  
-  $sCharacter = $sText[$i];
-  // echo $sCharacter . ' - ' . ord($sCharacter) . "</br>";
+$sText = file_get_contents($_FILES['arquivo']['tmp_name']);
 
-  $iCharacter = (int) ord($sCharacter);
-  $sCode      = $oEncoder->encode($iCharacter);
-
-  echo $sCharacter . ' - [' . $iCharacter . '] - ' . $sCode . "</br>";
-  $sTextOutHexa .= base_convert($sCode, 2, 16);
+if (empty($sText)) {
+  throw new Exception("Erro ao Ler o arquivo");
 }
 
-echo "input hex </br>";
-echo $sText . PHP_EOL .  "</br>";
+if ($sOption == 'encoder') {
 
-echo "output hex: </br>";
-echo $sTextOutHexa;
+  $oEncoder = new Encoder($iBase, $sText);
+  $oEncoder->process();
 
-echo "</br>";
-echo "</br>";
-echo "</br>";
+  echo $oEncoder->getSteps();
 
-$sDecode = '111111111110100';
+} else {
+  $oDecoder = new Decoder($iBase);
+  
+}
 
-$iCode = $oDecoder->decode($sDecode);
+// $sTextOutHexa = '';
 
-print_r(chr($iCode));
+// $M = 10; //@divisor
+
+
+
+// for ($i = 0; $i < strlen($sText); $i++) {
+  
+//   $sCharacter = $sText[$i];
+//   // echo $sCharacter . ' - ' . ord($sCharacter) . "</br>";
+
+//   $iCharacter = (int) ord($sCharacter);
+//   $sCode      = $oEncoder->encode($iCharacter);
+
+//   echo $sCharacter . ' - [' . $iCharacter . '] - ' . $sCode . "</br>";
+//   $sTextOutHexa .= base_convert($sCode, 2, 16);
+// }
+
+// echo "input hex </br>";
+// echo $sText . PHP_EOL .  "</br>";
+
+// echo "output hex: </br>";
+// echo $sTextOutHexa;
+
+// echo "</br>";
+// echo "</br>";
+// echo "</br>";
+
+// $sDecode = '111111111110100';
+
+// $iCode = $oDecoder->decode($sDecode);
+
+// print_r(chr($iCode));
 
 // $sQuantient = explode(0, $sDecode)[0];
 // $iQuantient = strlen($sQuantient) * $M;

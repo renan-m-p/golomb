@@ -4,13 +4,58 @@ class Encoder {
 
   private $iBase = 2;
 
+  private $sText;
 
-  public function __construct($iBase) {
+  private $aCodes = array();
+
+  private $aCodesHex = array();
+
+  private $aSteps = array();
+
+  public function __construct($iBase, $sText) {
     $this->iBase = $iBase;
+    $this->sText = $sText;
   }
 
 
-  public function encode($iCharacter) {
+  public function process() {
+
+    for ($iText = 0; $iText < strlen($this->sText); $iText++) {
+
+      $sCharacter     = $this->sText[$iText];
+      $iCharacter     = (int) ord($sCharacter);
+      $sCode          = $this->encode($iCharacter);
+
+      $this->aCodes[]  = $sCode;
+      $this->aCodesHex = base_convert($sCode, 2, 16);
+      $this->aSteps[]  = $this->makeLine($sCharacter,$sCode);
+    }
+  }
+
+  public function getBinaryCode() {
+    return implode(' ', $this->aCodes);
+  }
+
+  public function getHexCode() {
+    return implode(' ', $this->aCodesHex);
+  }
+
+  public function getSteps() {
+    return implode("</br>", $this->aSteps);
+  }
+
+  private function makeLine($sCharacter, $sCode) { //@todo Pensar melhro nisso...
+
+    $sHtml  = "<li>";
+    $sHtml .= "  <span>$sCharacter</span>";
+    $sHtml .= "  => $sCode";
+    $sHtml .= "</li>";
+
+    return $sHtml;
+  }
+
+
+  private function encode($iCharacter) {
 
     $iQuotient  = floor($iCharacter / $this->iBase); //int(numero/divisor)
     $iRemainder =  $iCharacter % $this->iBase; // Number modulo of Base
