@@ -1,6 +1,6 @@
 <?php
-require_once('libs/Encoder.php');
-require_once('libs/Decoder.php');
+require_once('src/Encoder.php');
+require_once('src/Decoder.php');
 
 
 $iBase   = $_POST['base'];
@@ -15,70 +15,89 @@ if (empty($sText)) {
 
 if ($sOption == 'encoder') {
 
-  $oEncoder = new Encoder($iBase, $sText);
-  $oEncoder->process();
-
-  echo $oEncoder->getSteps();
+  $oEncoder    = new Encoder($iBase, $sText);
+  $sOutputFile = $oEncoder->process();
 
 } else {
-  $oDecoder = new Decoder($iBase);
-  
+
+  $oDecoder = new Decoder($iBase, $sText);
+  $sText = $oDecoder->process();
 }
-
-// $sTextOutHexa = '';
-
-// $M = 10; //@divisor
-
-
-
-// for ($i = 0; $i < strlen($sText); $i++) {
-  
-//   $sCharacter = $sText[$i];
-//   // echo $sCharacter . ' - ' . ord($sCharacter) . "</br>";
-
-//   $iCharacter = (int) ord($sCharacter);
-//   $sCode      = $oEncoder->encode($iCharacter);
-
-//   echo $sCharacter . ' - [' . $iCharacter . '] - ' . $sCode . "</br>";
-//   $sTextOutHexa .= base_convert($sCode, 2, 16);
-// }
-
-// echo "input hex </br>";
-// echo $sText . PHP_EOL .  "</br>";
-
-// echo "output hex: </br>";
-// echo $sTextOutHexa;
-
-// echo "</br>";
-// echo "</br>";
-// echo "</br>";
-
-// $sDecode = '111111111110100';
-
-// $iCode = $oDecoder->decode($sDecode);
-
-// print_r(chr($iCode));
-
-// $sQuantient = explode(0, $sDecode)[0];
-// $iQuantient = strlen($sQuantient) * $M;
-
-// $iBaseRemainder = ceil(log($M, 2));
-// $sRemainderCode = substr($sDecode, strlen($sQuantient));
-// $iRemainderCode = bindec($sRemainderCode);
-// 
-// if ($iRemainderCode >  (pow(2, $iBaseRemainder) - $M)) {
-  // $iNumber =   $iRemainderCode -(pow(2, $iBaseRemainder) - $M);
-  // $iRemainderCode = $iNumber;
-// }
-// 
-// echo '<pre>';
-// print_r($sRemainderCode);
-// echo "</br>";
-// print_r($iQuantient);
-// echo "</br>";
-// echo chr($iQuantient + $iRemainderCode);
-// die();
-
 
 
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+
+    <div class="container">
+      
+      <div class="page-header">
+        <h1>Golomb</h1>
+      </div>
+
+      <?php if (isset($oDecoder)) {  ?>
+         <div class="col-md-12">
+          <div class="panel panel-default">  
+            <div class="panel-heading"><h2>Texto Decodificado: </h2></div>
+            <div class="panel-body">
+              <p><?php echo $sText; ?></p>
+            </div>
+          </div>
+         </div>
+       <?php } ?>
+
+
+      <?php if (isset($oEncoder)) {  ?>
+        <div class="col-md-4">
+        
+          <div class="panel panel-default">  
+            <div class="panel-heading"><h2>Passo a Passo: </h2></div>
+            <ul class="list-group">
+              <?php echo $oEncoder->getSteps(); ?>
+            </ul>
+          </div>
+         </div>
+
+         <div class="col-md-8">
+          <div class="panel panel-default">  
+            <div class="panel-heading"><h2>Input Hexadecimal: </h2></div>
+            <div class="panel-body">
+              <p><?php echo $oEncoder->getHexText(); ?></p>
+            </div>
+          </div>
+         </div>
+
+         <div class="col-md-8">
+          <div class="panel panel-default">  
+            <div class="panel-heading"><h2>Output Hexadecimal: </h2></div>
+            <div class="panel-body">
+              <p><?php echo $oEncoder->getHexCode(); ?></p>
+            </div>
+          </div>
+         </div>
+
+         <div class="col-md-8">
+          <div class="panel panel-default">  
+            <div class="panel-heading"><h2>Arquivo: </h2></div>
+            <div class="panel-body">
+              <a href="<?='tmp/'.$sOutputFile?>" target="_blanl"><?=$sOutputFile?></a>
+            </div>
+          </div>
+         </div>
+       <?php } ?>
+
+      </div>
+    </div>
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>

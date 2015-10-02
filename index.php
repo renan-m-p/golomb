@@ -23,27 +23,32 @@
       
         <form action="main.php" method="post" class="form-horizontal" enctype="multipart/form-data">
           <div class="col-md-6">
-            <label for="base">Divisor</label>
-            <input type="number" min="1" class="form-control" name="base" id="base" placeholder="Divisor">
-          </div>
-          <div class="col-md-6">
-            <label for="arquivo">Arquivo Codificar/Decodificar</label>
-            <input type="file" class="form-control" id="arquivo" name="arquivo" placeholder="Arquivo">
-            <p class="help-block">Selecione o arquivo a ser codificado ou decodificado.</p>
-          </div>
-          <div class="col-md-6"> 
-            <div class="input-group">
-                Codificar
-                <input type="radio" class="radio" value="encoder" id="codificar" name="option" placeholder="Codificar">
+            <div class="form-group">
+              <label for="base">Divisor</label>
+              <input type="number" required min="1" class="form-control" name="base" id="base" placeholder="Divisor">
             </div>
-          </div>
-          <div class="col-md-6">
-            <div class="input-group">
-                Decodificar
-                <input type="radio" class="radio" value="decoder" id="decodificar" name="option" placeholder="Codificar">
+            <div class="form-group">
+              <label for="arquivo">Arquivo Codificar/Decodificar</label>
+              <input required type="file" class="form-control" id="arquivo" name="arquivo" placeholder="Arquivo">
+              <p class="help-block">Selecione o arquivo a ser codificado ou decodificado.</p>
             </div>
+            <div class="form-group"> 
+              <div class="radio">
+                <label>
+                  <input type="radio" checked value="encoder" id="codificar" name="option" placeholder="Codificar">
+                  Codificar
+                </label>
+              </div>
+              <div class="radio">
+                <label>
+                  <input type="radio" value="decoder" id="decodificar" name="option" placeholder="Codificar">
+                  Decodificar
+                </label>
+              </div>
+            </div>
+            
+            <button type="submit" class="btn btn-default">Codificar/Decodificar</button>
           </div>
-          <button type="submit" class="btn btn-default">Codificar/Decodificar</button>
         </form>
       </div>
     </div>
